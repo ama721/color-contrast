@@ -1,0 +1,111 @@
+---
+title: "Use Contrast to Create Impact"
+author: "By: Ama Nyame-Mensah"
+date: ""
+output: html_document
+---
+  
+<style type="text/css">
+  h4{
+    font-size: 15pt;
+    color: "#262626";
+    family="Montserrat";
+  }
+</style>
+  
+  
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, error=TRUE, message=FALSE, warning=FALSE)
+
+#### PACKAGES + SET UP ####
+#  create notin operator
+`%notin%` <- Negate(`%in%`)
+
+#  Check if the required packages are installed
+#  And if they are not installed, install them
+pckgs <- c("plotly", "tidyverse","htmlwidgets")
+
+if (any(pckgs %notin% rownames(installed.packages())==TRUE)){
+  install.packages(pckgs, repos = c(CRAN = "http://cloud.r-project.org"))}
+  
+sapply(pckgs, FUN = function(x) require(x, character.only = TRUE))
+
+```
+
+```{r, echo = FALSE}
+
+d <-
+read_csv("https://www.dropbox.com/s/dt27hpit6mflmub/Color%20Contrast.csv?dl=1") %>%
+mutate(`Skill Gained` = factor(`Skill Gained`, levels = c(`Skill Gained`)))
+
+
+#### CHART LAYOUT AND FORMATTING ####
+# Set font parameters for chart axes
+	axisfont<-list(family = "Montserrat", size = 13, color = "#313131")
+
+# Set x and y axis layout 
+xaxis <- list(title = "",
+    range=c(0,.6),
+    zeroline = FALSE,
+    showline = FALSE,
+    showticklabels = FALSE,
+    showgrid = FALSE,
+    autotick = FALSE,
+    dtick=.6,
+    tickfont = axisfont,
+    tickformat = "%",
+    ticks = 'none',
+    tickcolor = 'transparent',
+    tickwidth = 0.5,
+    ticklen = 10)
+
+yaxis <- list(title = "",
+    range=c(-1,10),
+    zeroline = FALSE,
+    showline = FALSE,
+    showticklabels = TRUE,
+    showgrid = FALSE,
+    autotick = FALSE,
+    tickfont = axisfont,
+    dtick=1,
+    ticks = 'none',
+    tickcolor = 'transparent',
+    tickwidth =  0.5,
+    ticklen = 10)
+    
+# Set chart margins
+margin <- list(autoexpand = TRUE,
+	l = 100,
+	r = 0,
+	t = 80,
+	b = -30,
+	pad = 0)
+
+# Chart title
+title <- list(
+	range=c(0,0.6),
+	x=0,
+	y=11,
+    xanchor = "left", 
+    align = "left",
+    font = list(size = 16 ,
+   family="Montserrat"), text=paste0("<span style = 'color: #C7173C;margin-bottom: 50px;'><b>","Over half of job seekers gained skills in searching and applying for jobs</b></span><br><span style ='color: #313131;'> after using one of our resources </span>"))
+
+#### CREATE CHART ####
+p <- plot_ly(d, height = 530, width=670) %>%
+add_trace(x = ~Percent, y = ~ `Skill Gained`, type = 'bar', orientation = 'h', hoverinfo="none", 
+				text = paste0("<b>",d$Percent*100,"%","</b>"), textposition = 'auto', 
+				marker = list(color = "#C7173C", opacity = c(.5,.5,.5,.5,.5,.5,.5,1,1), 
+				line = list(color = "#C7173C", width = 5)) , 
+				textfont = list(family = "Montserrat",  color =  "#FFFFFF", size = 13)) %>%
+layout(title = title, xaxis = xaxis, yaxis=yaxis, plot_bgcolor  = "rgba(0, 0, 0, 0)",
+			paper_bgcolor = "rgba(0, 0, 0, 0)", showlegend = FALSE, autosize= FALSE, margin = margin)
+           
+p %>%             
+        config(displayModeBar = F) %>%
+        onRender("function(el, x) {Plotly.d3.select('.cursor-crosshair').style('cursor', 'pointer')}")
+
+```
+<span style ='color:#313131;font-family:Montserrat;font-size:11pt;' >Click <a href="https://www.anyamemensah.com/blog/color-contrast">here</a> to see the accompanying blog post.</p>
+
+
