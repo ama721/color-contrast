@@ -15,18 +15,11 @@ output: html_document
   
   
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, error=TRUE, message=FALSE, warning=FALSE)
-
-#### PACKAGES + SET UP ####
-#  create notin operator
+knitr::opts_chunk$set(echo = TRUE, error=TRUE, message=FALSE, warning=FALSE)create notin operator
 `%notin%` <- Negate(`%in%`)
 
-#  Check if the required packages are installed
-#  And if they are not installed, install them
+# required packages
 pckgs <- c("plotly", "tidyverse","htmlwidgets")
-
-if (any(pckgs %notin% rownames(installed.packages())==TRUE)){
-  install.packages(pckgs, repos = c(CRAN = "http://cloud.r-project.org"))}
   
 sapply(pckgs, FUN = function(x) require(x, character.only = TRUE))
 
